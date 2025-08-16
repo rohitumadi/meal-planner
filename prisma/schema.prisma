@@ -1,0 +1,100 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  Meal      Meal[]
+  role      Role
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Food {
+  id              String            @id @default(uuid())
+  name            String            @unique
+  calories        Float?
+  protein         Float?
+  fat             Float?
+  carbs           Float?
+  fiber           Float?
+  sugar           Float?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  category        Category?         @relation(fields: [categoryId], references: [id])
+  categoryId      String?
+  foodServingUnit FoodServingUnit[]
+  Meal            Meal?             @relation(fields: [mealId], references: [id])
+  mealId          String?
+  MealFood        MealFood[]
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  foods     Food[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ServingUnit {
+  id              String            @id @default(uuid())
+  name            String            @unique
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  foodServingUnit FoodServingUnit[]
+  mealFood        MealFood[]
+}
+
+model FoodServingUnit {
+  id            String      @id @default(uuid())
+  food          Food        @relation(fields: [foodId], references: [id])
+  foodId        String
+  servingUnit   ServingUnit @relation(fields: [servingUnitId], references: [id])
+  servingUnitId String
+  grams         Float
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Meal {
+  id        String     @id @default(uuid())
+  name      String
+  dateTime  DateTime
+  user      User       @relation(fields: [userId], references: [id])
+  userId    String
+  foods     Food[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  mealFood  MealFood[]
+}
+
+model MealFood {
+  id            String      @id @default(uuid())
+  meal          Meal        @relation(fields: [mealId], references: [id])
+  mealId        String
+  food          Food        @relation(fields: [foodId], references: [id])
+  foodId        String
+  servingUnit   ServingUnit @relation(fields: [servingUnitId], references: [id])
+  servingUnitId String
+  quantity      Float
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
