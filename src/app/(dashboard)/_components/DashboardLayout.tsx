@@ -19,28 +19,31 @@ const DashboardLayout = ({ children }: Props) => {
     <>
       <SidebarProvider>
         <AppSidebar />
-        <main className="bg-background z-10 flex h-13 w-screen items-center justify-between border p-2">
-          <SidebarTrigger />
-          {children}
-          <div className="flex items-center gap-2">
-            <ModeToggle />
-            <SignedOut>
-              <SignInButton>
-                <Button variant="outline" className="ml-2">
-                  Sign In
-                </Button>
-              </SignInButton>
-              <SignUpButton>
-                <Button variant="outline" className="ml-2">
-                  Sign Up
-                </Button>
-              </SignUpButton>
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-          </div>
-        </main>
+        <div className="flex w-full flex-col">
+          <nav className="bg-background z-10 flex h-13 items-center justify-between border p-2">
+            <SidebarTrigger />
+            {/* auth */}
+            <div className="flex items-center gap-2">
+              <ModeToggle />
+              <SignedOut>
+                <SignInButton>
+                  <Button variant="outline" className="ml-2">
+                    Sign In
+                  </Button>
+                </SignInButton>
+                <SignUpButton>
+                  <Button variant="outline" className="ml-2">
+                    Sign Up
+                  </Button>
+                </SignUpButton>
+              </SignedOut>
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+            </div>
+          </nav>
+          <main className="m-2">{children}</main>
+        </div>
       </SidebarProvider>
     </>
   );

@@ -1,3 +1,4 @@
+"'use client";
 import {
   Collapsible,
   CollapsibleContent,
@@ -18,6 +19,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Apple, Boxes, ChevronDown, Ruler, Utensils } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 type RouteGroupType = {
   group: string;
@@ -62,6 +64,7 @@ const ROUTE_GROUPS: RouteGroupType[] = [
 ];
 
 export function AppSidebar() {
+  const pathname = usePathname();
   return (
     <Sidebar>
       <SidebarHeader>
@@ -90,7 +93,10 @@ export function AppSidebar() {
                   <SidebarMenuSub>
                     {route_group.items.map((item) => (
                       <SidebarMenuSubItem key={item.href}>
-                        <SidebarMenuSubButton asChild>
+                        <SidebarMenuSubButton
+                          asChild
+                          isActive={pathname.startsWith(item.href)}
+                        >
                           <Link href={item.href} className="flex items-center">
                             {item.icon}
                             <span className="ml-2">{item.label}</span>
